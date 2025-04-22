@@ -21,6 +21,7 @@ def download_one_file_of_raw_data(year: int, month: int) -> Path:
     else:
         raise Exception(f'{URL} is not available')
     
+
 def validate_raw_data(rides: pd.DataFrame, year: int, month: int) -> pd.DataFrame:
     """
     Removes the rows with pickup dates outside their valid range
@@ -31,6 +32,28 @@ def validate_raw_data(rides: pd.DataFrame, year: int, month: int) -> pd.DataFram
     rides = rides[rides.pickup_datetime < next_month_start]
 
     return rides
+
+
+def load_raw_data(year: int, months: Optional[List[int]] = None) -> pd.DataFrame:
+    """
+    """
+    rides = pd.DataFrame()
+
+    if months is None:
+        ## download only the data specified by months
+        months = list(range(1,13))
+    elif isinstance(months, int):
+        months = [months]
+    for month in months:
+        local_file = RAW_DATA_DIR / f'rides_{year}-{month:02d}.parquet'
+        if not local_file.exists():
+            try:
+                #### Download the file if it does not exist
+                print(f'Downloading file {year}-{month:02d}')
+                download_one_file_of_raw_data(year, month)
+            except:
+                print(f'{year}-{month:02d} file is not available')
+                continue
 
 
 def fetch_ride_events_from_data_warehouse(from_date: datetime, to_date: datetime) -> pd.DataFrame:
@@ -44,7 +67,7 @@ def fetch_ride_events_from_data_warehouse(from_date: datetime, to_date: datetime
 
     if(from_date_.year == to_date_.year) and (from_date_.month == to_date_.month):
         ## if month and year is the same download only one file
-        rides = load_raw_date(year = from_date_.year, months = from_date_.month)
+        rides = load_raw_data(year = from_date_.year, months = from_date_.month)
         rides = rides[rides.pickup_datetime >= from_date_]
         rides = rides[rides.pickup_datetime < to_date_]
     
