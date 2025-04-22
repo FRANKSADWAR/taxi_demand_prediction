@@ -8,6 +8,9 @@ import pandas as pd
 import numpy as np
 
 def download_one_file_of_raw_data(year: int, month: int) -> Path:
+    """
+    Gets the raw data from the web and stores it
+    """
     URL = f'https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_{year}-{month:02d}.parquet'
     response = requests.get(URL)
 
@@ -28,3 +31,13 @@ def validate_raw_data(rides: pd.DataFrame, year: int, month: int) -> pd.DataFram
     rides = rides[rides.pickup_datetime < next_month_start]
 
     return rides
+
+
+def fetch_ride_events_from_data_warehouse(from_date: datetime, to_date: datetime) -> pd.DataFrame:
+    """
+    This function is used to simulate production data by sampling historical data
+    from 52 weeks ago (1 year ago).
+    """
+    from_date = from_date - timedelta(days=7*52)
+    to_date = to_date - timedelta(days = 7 * 52)
+    
