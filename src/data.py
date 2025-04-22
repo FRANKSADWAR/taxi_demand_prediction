@@ -38,6 +38,17 @@ def fetch_ride_events_from_data_warehouse(from_date: datetime, to_date: datetime
     This function is used to simulate production data by sampling historical data
     from 52 weeks ago (1 year ago).
     """
-    from_date = from_date - timedelta(days=7*52)
-    to_date = to_date - timedelta(days = 7 * 52)
+    from_date_ = from_date - timedelta(days=7*52)
+    to_date_ = to_date - timedelta(days = 7 * 52)
+    print(f'Fetching ride events from {from_date} to {to_date}')
+
+    if(from_date_.year == to_date_.year) and (from_date_.month == to_date_.month):
+        ## if month and year is the same download only one file
+        rides = load_raw_date(year = from_date_.year, months = from_date_.month)
+        rides = rides[rides.pickup_datetime >= from_date_]
+        rides = rides[rides.pickup_datetime < to_date_]
     
+    else:
+        ## download the required files
+        rides = load_raw_data(year = from_date_.year, months = from_date_.month)
+        
