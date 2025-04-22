@@ -44,6 +44,7 @@ def load_raw_data(year: int, months: Optional[List[int]] = None) -> pd.DataFrame
         months = list(range(1,13))
     elif isinstance(months, int):
         months = [months]
+    
     for month in months:
         local_file = RAW_DATA_DIR / f'rides_{year}-{month:02d}.parquet'
         if not local_file.exists():
@@ -54,7 +55,28 @@ def load_raw_data(year: int, months: Optional[List[int]] = None) -> pd.DataFrame
             except:
                 print(f'{year}-{month:02d} file is not available')
                 continue
+        else:
+            print(f'File {year}-{month:02d} is already available in storage')
 
+        ## Load the file into Pandas
+        rides_one_month = pd.read_parquet(local_file)
+
+        ## select and rename columns
+        rides_one_month = rides_one_month[['tpep_pickup_datetime','PULocationID']]
+        rides_one_month.rename(columns={
+            'tpep_pickup_datetime': 'pickup_datetime',
+            'PULocationID': 'pickup_location_id'
+        }, inplace=True)
+
+        ## Validate the file
+        rides_one_month = validate_raw_data(rides_one_month, year, month)
+
+        ### Append to existing data
+        rides = pd.concat([rides, rides_one_month])
+    
+    rides = rides[['pickup_datetime','pickup_location_id']]
+
+    return rides
 
 def fetch_ride_events_from_data_warehouse(from_date: datetime, to_date: datetime) -> pd.DataFrame:
     """
