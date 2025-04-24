@@ -36,7 +36,8 @@ def download_one_file_of_raw_data(year: int, month: int) -> Path:
 
 def validate_raw_data(rides: pd.DataFrame, year: int, month: int) -> pd.DataFrame:
     """
-    Removes the rows with pickup dates outside their valid range
+    This function filters a DataFrame of ride records to include those with pickup_datetime
+    values within the specified year and month
     """
     this_month_start = f'{year}-{month:02d}-01'
     next_month_start = f'{year}-{month+1:02d}-01' if month < 12 else f'{year+1}-01-01'
