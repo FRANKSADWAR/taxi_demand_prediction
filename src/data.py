@@ -75,7 +75,6 @@ def load_raw_data(year: int, months: Optional[List[int]] = None) -> pd.DataFrame
         rides = pd.concat([rides, rides_one_month])
     
     rides = rides[['pickup_datetime','pickup_location_id']]
-
     return rides
 
 def fetch_ride_events_from_data_warehouse(from_date: datetime, to_date: datetime) -> pd.DataFrame:
