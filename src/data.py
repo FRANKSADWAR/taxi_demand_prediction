@@ -10,7 +10,18 @@ import plotly.express as px
 
 def download_one_file_of_raw_data(year: int, month: int) -> Path:
     """
-    Gets the raw data from the web and stores it
+    This function downloads a specific month's raw taxi trip data file from a remote server and saves it 
+    locally in the organization's raw data directory. 
+    It returns the path to the saved file or raises an exception if the download fails.
+
+    Args:
+        year(int): the year of the data file to download
+        month(int): the month of the data file to download
+    Returns:
+        Path: The local path top the saved file
+    Raises:
+        Exception if the file cannot be downloaded from the remote server
+   
     """
     URL = f'https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_{year}-{month:02d}.parquet'
     response = requests.get(URL)
@@ -21,6 +32,7 @@ def download_one_file_of_raw_data(year: int, month: int) -> Path:
         return path
     else:
         raise Exception(f'{URL} is not available')
+
 
 def validate_raw_data(rides: pd.DataFrame, year: int, month: int) -> pd.DataFrame:
     """
@@ -105,7 +117,7 @@ def add_missing_slots(agg_rides: pd.DataFrame) -> pd.DataFrame:
 def transform_raw_data_into_ts_data(rides: pd.DataFrame) -> pd.DataFrame:
     """
     """
-    rides['pickup_hour'] = rides['pickup_datetime'].dt.floor('H')
+    rides['pickup_hour'] = rides['pickup_datetime'].dt.floor('h')
     agg_rides = rides.groupby(['pickup_hour','pickup_location_id']).size().reset_index()
     agg_rides.rename(columns ={0: 'rides'},inplace=True)
 
