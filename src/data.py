@@ -39,10 +39,11 @@ def validate_raw_data(rides: pd.DataFrame, year: int, month: int) -> pd.DataFram
     This function filters a DataFrame of ride records to include those with pickup_datetime
     values within the specified year and month
     Inputs
-    
-    rides: a pandas DataFrame containing at least a pickup_datetime column.
-    year: integer specifying the year to filter by.
-    month: integer specifying the month to filter by.
+
+    Args:
+        rides: a pandas DataFrame containing at least a pickup_datetime column.
+        year: integer specifying the year to filter by.
+        month: integer specifying the month to filter by.
     Flow
     Constructs string representations for the start of the specified month and the next month.
     Filters the DataFrame to include only rows where pickup_datetime is on or after the start of the specified month.
