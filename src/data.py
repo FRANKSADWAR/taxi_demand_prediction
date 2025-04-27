@@ -155,8 +155,18 @@ def add_missing_slots(agg_rides: pd.DataFrame) -> pd.DataFrame:
 
 def transform_raw_data_into_ts_data(rides: pd.DataFrame) -> pd.DataFrame:
     """
+    Transforms raw ride data into a time series DataFrame by aggregating ride counts per hour and pickup location, and fills in missing hourly slots with zero rides.
+
+    Args:
+        rides (pd.DataFrame): DataFrame containing at least 'pickup_datetime' and 'pickup_location_id' columns.
+
+    Returns:
+        pd.DataFrame: Time series DataFrame with hourly ride counts for each pickup location, including hours with zero rides.
     """
+    ## Floor (round off) the pickup hour to the nearest hour
     rides['pickup_hour'] = rides['pickup_datetime'].dt.floor('h')
+
+    ## Gorup the data by the pickup_hour and the pickup_location_id, count rides per group
     agg_rides = rides.groupby(['pickup_hour','pickup_location_id']).size().reset_index()
     agg_rides.rename(columns ={0: 'rides'},inplace=True)
 
