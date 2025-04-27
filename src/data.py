@@ -177,7 +177,15 @@ def transform_raw_data_into_ts_data(rides: pd.DataFrame) -> pd.DataFrame:
 
 def get_cutoff_indices(data: pd.DataFrame, n_features: int, step_size: int) -> list:
     """
-    
+    Generate a list of index tuples marking the start, middle, and end positions for sliding sub-sequences over a DataFrame.
+
+    Args:
+        data (pd.DataFrame): Input DataFrame to generate indices from.
+        n_features (int): Length of each sub-sequence.
+        step_size (int): Step size to move the window.
+
+    Returns:
+        list: List of tuples (start_idx, mid_idx, end_idx) for each sub-sequence window.
     """
     stop_position = len(data) -1 
 
