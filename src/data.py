@@ -44,13 +44,9 @@ def validate_raw_data(rides: pd.DataFrame, year: int, month: int) -> pd.DataFram
         rides: a pandas DataFrame containing at least a pickup_datetime column.
         year: integer specifying the year to filter by.
         month: integer specifying the month to filter by.
-    Flow
-    Constructs string representations for the start of the specified month and the next month.
-    Filters the DataFrame to include only rows where pickup_datetime is on or after the start of the specified month.
-    Further filters to include only rows where pickup_datetime is before the start of the next month.
-    Returns the filtered DataFrame.
-    Outputs
-    A pandas DataFrame containing only the rides with pickup_datetime within the specified year and month.
+
+    Returns:
+        A pandas DataFrame containing only the rides with pickup_datetime within the specified year and month.
 
 
     """
@@ -64,15 +60,27 @@ def validate_raw_data(rides: pd.DataFrame, year: int, month: int) -> pd.DataFram
 
 def load_raw_data(year: int, months: Optional[List[int]] = None) -> pd.DataFrame:
     """
+    Args:
+        year (int): the year of the data to load
+        months: optional list of integers (1-12) specifying which months to load, if None, loads
+                all months
+
+    Returns:
+        Dataframe: a pandas dataframe contaning validated ride data for the specified year and months,
+                    with columns pickup_datetime ad=nd pickup_location_id
     """
+
+    ## Initialize an empty dataframe to colect the rides
     rides = pd.DataFrame()
 
+    ## Determines which months to process (all if months is None)
     if months is None:
         ## download only the data specified by months
         months = list(range(1,13))
     elif isinstance(months, int):
         months = [months]
     
+    ## For each month, check if corresponding file exists, if not download it
     for month in months:
         local_file = RAW_DATA_DIR / f'rides_{year}-{month:02d}.parquet'
         if not local_file.exists():
