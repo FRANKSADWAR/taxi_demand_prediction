@@ -116,10 +116,25 @@ def load_raw_data(year: int, months: Optional[List[int]] = None) -> pd.DataFrame
 
 
 def add_missing_slots(agg_rides: pd.DataFrame) -> pd.DataFrame:
+    """
+    Fills in missing hourly time slots for each pickup location in the input DataFrame, ensuring a continuous time series for all locations. 
+    Missing slots are added with a ride count of zero.
+
+    Args:
+        agg_rides (pd.DataFrame): DataFrame containing 'pickup_hour', 'pickup_location_id', and 'rides' columns.
+
+    Returns:
+        pd.DataFrame: DataFrame with missing hourly slots filled for each pickup location.
+    """
+    ## get the location ids
     location_ids = agg_rides['pickup_location_id'].unique()
+
+    ## generate the full rage of the date_time data between the earliest and latest pickup hours
     full_range = pd.date_range(agg_rides['pickup_hour'].min(), agg_rides['pickup_hour'].max(), freq='h')
+    
     output = pd.DataFrame()
 
+    ## Iterate over each location ID
     for location_id in tqdm(location_ids):
         ## keep only the rides for this location id
         agg_rides_i = agg_rides.loc[agg_rides.pickup_location_id == location_id,['pickup_hour','rides']]
