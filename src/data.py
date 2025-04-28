@@ -204,15 +204,21 @@ def get_cutoff_indices(data: pd.DataFrame, n_features: int, step_size: int) -> l
     return indices
 
 
-
-
-### FUnction that will transform all time series data into tarbular data
+### uUnction that will transform all time series data into tarbular data
 def transform_ts_data_into_features_and_target(ts_data: pd.DataFrame, input_sequence_len: int, step_size: int) -> pd.DataFrame:
     """
     This function transforms time series data of ride counts into a supervised learning format 
     by generating features and target datasets suitable for training ML models.
     FOr each unique location, it creates sliding windows of previous ride counts as features and the
     subsequent ride counts as the target, orgainizing the data into two aligned DataFrames.
+
+    Args:
+        ts_data (pd.DataFrame): Input DataFrame with columns 'pickup_hour', 'rides', and 'pickup_location_id'.
+        input_sequence_len (int): Number of previous time steps to use as features.
+        step_size (int): Step size for the sliding window.
+
+    Returns:
+        Tuple[pd.DataFrame, pd.Series]: Features DataFrame and target Series for supervised learning.
     """
     ## Assert that the input DataFrame has the required columns
     assert set(ts_data.columns) == {'pickup_hour','rides','pickup_location_id'}
