@@ -269,11 +269,17 @@ def transform_ts_data_into_features_and_target(ts_data: pd.DataFrame, input_sequ
 
 def plot_rides(rides: pd.DataFrame, locations: Optional[List[int]] = None):
     """
-    Plot the time-series data
+    Plots time-series ride data using Plotly, optionally filtering by specified pickup location IDs.
+
+    Args:
+        rides (pd.DataFrame): DataFrame containing ride data with 'pickup_hour', 'rides', and 'pickup_location_id' columns.
+        locations (Optional[List[int]]): List of pickup location IDs to filter the data. If None, plots all locations.
     """
     rides_to_plot = rides[rides.pickup_location_id.isin(locations)] if locations else rides
     fig = px.line(rides_to_plot, x ="pickup_hour", y="rides", color = "pickup_location_id", template='none')
     fig.show()
+
+
 
 
 def fetch_ride_events_from_data_warehouse(from_date: datetime, to_date: datetime) -> pd.DataFrame:
