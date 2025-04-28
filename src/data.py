@@ -209,14 +209,18 @@ def get_cutoff_indices(data: pd.DataFrame, n_features: int, step_size: int) -> l
 ### FUnction that will transform all time series data into tarbular data
 def transform_ts_data_into_features_and_target(ts_data: pd.DataFrame, input_sequence_len: int, step_size: int) -> pd.DataFrame:
     """
-    Slices and transposes data from time series format into a features, target
-    format that we can use to train a Machine Learning model
+    This function transforms time series data of ride counts into a supervised learning format 
+    by generating features and target datasets suitable for training ML models.
+    FOr each unique location, it creates sliding windows of previous ride counts as features and the
+    subsequent ride counts as the target, orgainizing the data into two aligned DataFrames.
     """
+    ## Assert that the input DataFrame has the required columns
     assert set(ts_data.columns) == {'pickup_hour','rides','pickup_location_id'}
     location_ids = ts_data['pickup_location_id'].unique()
     features = pd.DataFrame()
     targets = pd.DataFrame()
 
+    ## For each unique location, filter the data and compute the sliding window indices
     for location_id in tqdm(location_ids):
         ## keep only the time-series data for the current location in the loop
         ts_data_one_location = ts_data.loc[ts_data.pickup_location_id == location_id,['pickup_hour','rides']]
