@@ -1,6 +1,6 @@
 import plotly.express as px
 from datetime import timedelta
-from typing import Optional
+from typing import Optional,List
 import pandas as pd
 
 
@@ -61,4 +61,16 @@ def plot_one_sample(
     
     
     
-    
+def plot_ts(ts_data: pd.DataFrame, locations: Optional[List[int]] = None):
+    """
+    """
+    ts_data_to_plot = ts_data[ts_data.pickup_location_id.isin(locations)] if locations else ts_data
+
+    fig = px.line(
+        ts_data_to_plot,
+        x="pickup_hour",
+        y="rides",
+        color="pickup_location_id",
+        template = None
+    )
+    fig.show()
