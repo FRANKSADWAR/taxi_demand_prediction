@@ -114,7 +114,6 @@ def load_raw_data(year: int, months: Optional[List[int]] = None) -> pd.DataFrame
     return rides
 
 
-
 def add_missing_slots(agg_rides: pd.DataFrame) -> pd.DataFrame:
     """
     Fills in missing hourly time slots for each pickup location in the input DataFrame, ensuring a continuous time series for all locations. 
@@ -151,7 +150,6 @@ def add_missing_slots(agg_rides: pd.DataFrame) -> pd.DataFrame:
 
     output = output.reset_index().rename(columns = {'index': 'pickup_hour'})
     return output
-
 
 def transform_raw_data_into_ts_data(rides: pd.DataFrame) -> pd.DataFrame:
     """
@@ -266,6 +264,18 @@ def transform_ts_data_into_features_and_target(ts_data: pd.DataFrame, input_sequ
 
     return features, targets['target_rides_next_hour']
 
+
+def plot_one_sample(
+    features: pd.DataFrame, 
+    targets: pd.Series, 
+    example_id: int,
+    predictions: Optional[pd.Series] = None):
+    """
+    """
+    features_ = features.iloc[example_id]
+    targets_ = targets.iloc[example_id]
+    
+    
 
 def plot_rides(rides: pd.DataFrame, locations: Optional[List[int]] = None):
     """
