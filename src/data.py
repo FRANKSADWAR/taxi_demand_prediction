@@ -265,18 +265,6 @@ def transform_ts_data_into_features_and_target(ts_data: pd.DataFrame, input_sequ
     return features, targets['target_rides_next_hour']
 
 
-def plot_one_sample(
-    features: pd.DataFrame, 
-    targets: pd.Series, 
-    example_id: int,
-    predictions: Optional[pd.Series] = None):
-    """
-    """
-    features_ = features.iloc[example_id]
-    targets_ = targets.iloc[example_id]
-    
-    
-
 def plot_rides(rides: pd.DataFrame, locations: Optional[List[int]] = None):
     """
     Plots time-series ride data using Plotly, optionally filtering by specified pickup location IDs.
