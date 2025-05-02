@@ -63,6 +63,7 @@ def plot_one_sample(
     
 def plot_ts(ts_data: pd.DataFrame, locations: Optional[List[int]] = None):
     """
+    Plot the time series data
     """
     ts_data_to_plot = ts_data[ts_data.pickup_location_id.isin(locations)] if locations else ts_data
 
