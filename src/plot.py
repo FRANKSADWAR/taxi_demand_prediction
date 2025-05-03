@@ -10,7 +10,7 @@ def plot_one_sample(
         example_id: int,
         predictions: Optional[pd.Series] = None,
         display_title: Optional[bool] = True
-):
+    ):
     features_ = features.iloc[example_id]
     if targets is not None:
         targets_ = targets.iloc[example_id]
@@ -20,11 +20,11 @@ def plot_one_sample(
     ts_columns = [c for c in features.columns if c.startswith('rides_previous_')]
     ts_values = [features_[c] for c in ts_columns] + [targets_]
     
-    ts_dates = pd.date_range(features_['pickup_hour'] - timedelta(hours=len(ts_columns)),
-                             features_['pickup_hour'],
-                             freq='H')
+    ts_dates = pd.date_range(features_['pickup_hours'] - timedelta(hours=len(ts_columns)),
+                             features_['pickup_hours'],
+                             freq='h')
     
-    title = f"Pick up hour={features_['pickup_hour']}, location_id={features_['pickup_location_id']}" if display_title else None
+    title = f"Pick up hour={features_['pickup_hours']}, location_id={features_['pickup_location_id']}" if display_title else None
     
     fig = px.line(
             x=ts_dates, 
@@ -56,6 +56,7 @@ def plot_one_sample(
             marker_size=15,
             name = 'Predictions'
         )
+    ## we can use fig.show() to create a plot
     return fig
     
     
@@ -69,7 +70,7 @@ def plot_ts(ts_data: pd.DataFrame, locations: Optional[List[int]] = None):
 
     fig = px.line(
         ts_data_to_plot,
-        x="pickup_hour",
+        x="pickup_hours",
         y="rides",
         color="pickup_location_id",
         template = None

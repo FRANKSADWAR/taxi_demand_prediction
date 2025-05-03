@@ -271,7 +271,7 @@ def plot_rides(rides: pd.DataFrame, locations: Optional[List[int]] = None):
 
     Args:
         rides (pd.DataFrame): DataFrame containing ride data with 'pickup_hour', 'rides', and 'pickup_location_id' columns.
-        locations (Optional[List[int]]): List of pickup location IDs to filter the data. If None, plots all locations.
+        locations (Optional[List[int]]): List of pickup location IDs to filter the data. If None, plots all locations. 
     """
     rides_to_plot = rides[rides.pickup_location_id.isin(locations)] if locations else rides
     fig = px.line(rides_to_plot, x ="pickup_hour", y="rides", color = "pickup_location_id", template='none')
