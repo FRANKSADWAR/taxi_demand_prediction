@@ -16,3 +16,6 @@ def train_test_split(
     y_train = train_data[target_column_name]
 
     X_test = test_data.drop(columns =[target_column_name])
+    y_test = test_data[target_column_name]
+
+    return X_train, y_train, X_test, y_test
