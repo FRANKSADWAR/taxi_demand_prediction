@@ -31,7 +31,8 @@ class TemporalFeaturesEngineering(BaseEstimator, TransformerMixin):
         X_["hour"] = X_["pickup_hours"].dt.hour
         X_["day_of_week"] = X_["pickup_hours"].dt.dayofweek
 
-        X_.drop(columns=['pickup_hours'], inplace = True)
+        X_.drop(columns = ['pickup_hours','pickup_location_id'], inplace = True)
+        
         return X_
     
 def get_pipeline(**hyperparams) -> Pipeline:
