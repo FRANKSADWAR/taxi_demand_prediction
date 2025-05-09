@@ -32,3 +32,18 @@ class TemporalFeatureEngineering(BaseEstimator, TransformerMixin):
         X_["day_of_week"] = X_["pickup_hours"].dt.dayofweek
         
         return X_.drop(columns=['pickup_hours'])
+    
+def get_pipeline(**hyperparams) -> Pipeline:
+    ## sklearn transform
+    add_feature_average_rides_last_4_weeks = FunctionTransformer(
+        average_rides_last_4_weeks, validate = False
+    )
+
+    ## sklearn transform
+    add_temporal_feautures = TemporalFeatureEngineering()
+
+    return make_pipeline(
+        add_feature_average_rides_last_4_weeks,
+        add_temporal_feautures,
+        lgb.LGBMRegressor(**hyperparams)
+    )
