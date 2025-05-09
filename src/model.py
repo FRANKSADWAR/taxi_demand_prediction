@@ -40,10 +40,10 @@ def get_pipeline(**hyperparams) -> Pipeline:
     )
 
     ## sklearn transform
-    add_temporal_feautures = TemporalFeatureEngineering()
+    add_temporal_features = TemporalFeatureEngineering()
 
     return make_pipeline(
         add_feature_average_rides_last_4_weeks,
-        add_temporal_feautures,
+        add_temporal_features,
         lgb.LGBMRegressor(**hyperparams)
     )
