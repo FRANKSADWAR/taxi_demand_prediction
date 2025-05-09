@@ -21,7 +21,7 @@ def average_rides_last_4_weeks(X: pd.DataFrame) -> pd.DataFrame:
 
 from sklearn.base import BaseEstimator, TransformerMixin
 
-class TemporalFeatureEngineering(BaseEstimator, TransformerMixin):
+class TemporalFeaturesEngineering(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
     
@@ -31,16 +31,15 @@ class TemporalFeatureEngineering(BaseEstimator, TransformerMixin):
         X_["hour"] = X_["pickup_hours"].dt.hour
         X_["day_of_week"] = X_["pickup_hours"].dt.dayofweek
         
-        return X_.drop(columns=['pickup_hours'])
+        return X_.drop(columns=['pickup_hours','pickup_location_id'],inplace=True)
     
 def get_pipeline(**hyperparams) -> Pipeline:
-    ## sklearn transform
-    add_feature_average_rides_last_4_weeks = FunctionTransformer(
-        average_rides_last_4_weeks, validate = False
-    )
 
     ## sklearn transform
-    add_temporal_features = TemporalFeatureEngineering()
+    add_feature_average_rides_last_4_weeks = FunctionTransformer(average_rides_last_4_weeks, validate = False)
+
+    ## sklearn transform
+    add_temporal_features = TemporalFeaturesEngineering()
 
     return make_pipeline(
         add_feature_average_rides_last_4_weeks,
