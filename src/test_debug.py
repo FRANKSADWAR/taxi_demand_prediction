@@ -57,10 +57,7 @@ def objective(trial: optuna.trial.Trial) -> float:
         
         ## Train the model
         pipeline = get_pipeline(**hyperparams)
-        
         pipeline.fit(X_train_, y_train_)
-
-        print(len(X_train_.columns))
 
         ## Evaluate the model
         y_pred = pipeline.predict(X_val_)
