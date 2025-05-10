@@ -20,8 +20,7 @@ from model import get_pipeline
 from sklearn.model_selection import KFold, TimeSeriesSplit
 
 df = pd.read_parquet(TRANSFORMED_DATA_DIR / 'tarbular_data.parquet')
-df.head()
-df.drop(columns=[],inplace=True)
+
 
 X_train, y_train, X_test, y_test = train_test_split(
     df,

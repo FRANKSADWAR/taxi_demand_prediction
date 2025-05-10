@@ -21,6 +21,8 @@ def average_rides_last_4_weeks(X: pd.DataFrame) -> pd.DataFrame:
 
 from sklearn.base import BaseEstimator, TransformerMixin
 
+
+
 class TemporalFeaturesEngineering(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
@@ -32,6 +34,9 @@ class TemporalFeaturesEngineering(BaseEstimator, TransformerMixin):
         X_["day_of_week"] = X_["pickup_hours"].dt.dayofweek
 
         X_.drop(columns = ['pickup_hours','pickup_location_id'], inplace = True)
+        column_list = list(X_.columns)
+        print(f"Last columns : {column_list[-5:]}")
+        print(f" Shape of data after transformation: {X_.shape}")
         
         return X_
     
