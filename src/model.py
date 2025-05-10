@@ -41,7 +41,6 @@ class TemporalFeaturesEngineering(BaseEstimator, TransformerMixin):
         return X_
     
 def get_pipeline(**hyperparams) -> Pipeline:
-
     ## sklearn transform
     add_feature_average_rides_last_4_weeks = FunctionTransformer(average_rides_last_4_weeks, validate = False)
 
