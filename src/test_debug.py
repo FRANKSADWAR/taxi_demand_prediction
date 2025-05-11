@@ -32,6 +32,10 @@ print(f'{y_train.shape=}')
 print(f'{X_test.shape=}')
 print(f'{y_test.shape=}')
 
+
+X_train.drop(columns=['pickup_hours'],inplace=True)
+X_test.drop(columns=['pickup_hours'],inplace=True)
+
 def objective(trial: optuna.trial.Trial) -> float:
     """
     Given a set of hyper-parameters, it trains a model and computes an average
@@ -53,7 +57,7 @@ def objective(trial: optuna.trial.Trial) -> float:
 
         ## Split data for training and validation
         X_train_, X_val_ = X_train.iloc[train_index, :], X_train.iloc[val_index,:]
-        y_train_, y_val_ = y_train.iloc[train_index], X_train.iloc[val_index]
+        y_train_, y_val_ = y_train.iloc[train_index], y_train.iloc[val_index]
         
         ## Train the model
         pipeline = get_pipeline(**hyperparams)
@@ -61,6 +65,8 @@ def objective(trial: optuna.trial.Trial) -> float:
 
         ## Evaluate the model
         y_pred = pipeline.predict(X_val_)
+        print(f" Predictions shape: {y_pred.shape}")
+        print(f"Y true shape: {y_val_.shape}")
         mae = mean_absolute_error(y_val_, y_pred)
 
         scores.append(mae)
