@@ -3,6 +3,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import make_pipeline, Pipeline
 from sklearn.preprocessing import FunctionTransformer
 import lightgbm as lgb
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
 def average_rides_last_4_weeks(X: pd.DataFrame) -> pd.DataFrame:
@@ -19,7 +20,6 @@ def average_rides_last_4_weeks(X: pd.DataFrame) -> pd.DataFrame:
 
     return X
 
-from sklearn.base import BaseEstimator, TransformerMixin
 
 
 
@@ -29,11 +29,13 @@ class TemporalFeaturesEngineering(BaseEstimator, TransformerMixin):
     
     def transform(self, X, y=None):
         X_ = X.copy()
+
         ### Generate numerical columns from datetime column
         X_["hour"] = X_["pickup_hours"].dt.hour
         X_["day_of_week"] = X_["pickup_hours"].dt.dayofweek
 
         X_.drop(columns = ['pickup_hours','pickup_location_id'], inplace = True)
+
         column_list = list(X_.columns)
         print(f"Last columns : {column_list[-5:]}")
         print(f" Shape of data after transformation: {X_.shape}")
@@ -44,8 +46,12 @@ def get_pipeline(**hyperparams) -> Pipeline:
     ## sklearn transform
     add_feature_average_rides_last_4_weeks = FunctionTransformer(average_rides_last_4_weeks, validate = False)
 
+    ## sklearn transform
+    add_temporal_features = TemporalFeaturesEngineering()
+
     ## sklearn make pipeline with an estimator
     return make_pipeline(
         add_feature_average_rides_last_4_weeks,
+        add_temporal_features,
         lgb.LGBMRegressor(**hyperparams)
     )
